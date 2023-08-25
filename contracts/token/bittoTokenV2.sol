@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
-contract ERC20Impl is ERC20Upgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable, OwnableUpgradeable, AccessControlUpgradeable, bittoTokenstorage {
+contract ERC20ImplV2 is ERC20Upgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable, OwnableUpgradeable, AccessControlUpgradeable, bittoTokenstorage {
 
     // ReentrancyGuardUpgradeable: 함수 호출 간에 다시 들어올 수 있는 재진입(reentrancy)을 방지하는 보안 기능, 해당 기능을 사용하려는 함수에 nonReentrant 한정자를 추가
     // PausableUpgradeable: 일시 중지 및 해제 기능을 제공, _pause() 및 _unpause() 내부 함수를 통해 해당 기능을 구현할 수 있으며, 함수는 컨트랙트 소유자만이 호출할 수 있다
