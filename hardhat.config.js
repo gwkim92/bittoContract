@@ -19,5 +19,14 @@ module.exports = {
         `0x1ab1f44a05a986db3a13f3672cd883a95e91a05ec625a913f18db5bae8f6e326`,
       ],
     },
+    goeril: {
+      url: "https://goerli.infura.io/v3/9a5f7e46cc504f13a23aebd09ef8888b",
+      accounts: [
+        `0x997ef27780b8afa1a5c605592faf1849203c7a1296498f73b9e6c34d6995c01c`,
+        `0xb5c15b901d616dc407a3804eeabf3b75cbc930c33b9d06d052f5f832bbcf64c1`,
+        `0x17d425b23fc6202beb8068ff18f22f5c47b8b44a93f840eeac67057daf6ef7b9`,
+        `0x1ab1f44a05a986db3a13f3672cd883a95e91a05ec625a913f18db5bae8f6e326`,
+      ],
+    },
   },
 };

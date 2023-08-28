@@ -51,9 +51,13 @@ contract ERC20ImplV2 is ERC20Upgradeable, ReentrancyGuardUpgradeable, PausableUp
     function unpause() public onlyOwner {
         _unpause();
     }
-
     // 토큰 전송 전 호출되는 내부 훅(hook) 함수: Pausable의 paused 상태를 확인합니다.
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal whenNotPaused override {
         super._beforeTokenTransfer(from, to, amount);
+    }
+    // burn() 함수: 소유자가 자신의 토큰을 소각할 수 있음.
+    function burn(uint256 amount) public whenNotPaused {
+        require(balanceOf(_msgSender()) >= amount, "ERC20: burn amount exceeds balance");
+        _burn(_msgSender(), amount);
     }
 }
