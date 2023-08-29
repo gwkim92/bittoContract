@@ -1,7 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const {
-  time,
   loadFixture,
 } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 
@@ -82,7 +81,7 @@ describe("Proxy Upgrade Test", function () {
     // Role-Based Access Control Tests
     describe("Role-Based Access Control", function () {
       it("should revert minting when sender does not have MINTER_ROLE", async function () {
-        const { owner, minter, recipient, admin } = await getSigners();
+        const { owner, recipient } = await getSigners();
         const { erc20ImplInstance } = await loadFixture(deployFixture);
         const MINTER_ROLE = await erc20ImplInstance.MINTER_ROLE();
         const mintAmount = ethers.parseEther("1000");
@@ -111,7 +110,7 @@ describe("Proxy Upgrade Test", function () {
       });
 
       it("should revert token transfer when paused", async () => {
-        const { owner, recipient } = await getSigners();
+        const { recipient } = await getSigners();
         const { erc20ImplInstance } = await loadFixture(deployFixture);
 
         let transferAmount = ethers.parseEther("500");
@@ -146,6 +145,7 @@ describe("Proxy Upgrade Test", function () {
           erc20ImplInstance,
           erc20ImplV2Address,
           transparentUpgradeableInstance,
+          erc20ImplV2Instance,
         } = await loadFixture(deployFixture);
 
         // Mint tokens to minter
@@ -163,6 +163,11 @@ describe("Proxy Upgrade Test", function () {
 
         // Upgrade the proxy to V2 implementation
         await transparentUpgradeableInstance.upgradeTo(erc20ImplV2Address);
+
+        const minterBalanceAfterUpgrade = await erc20ImplV2Instance.balanceOf(
+          recipient.address
+        );
+        expect(mintAmount).to.equal(minterBalanceAfterUpgrade);
       });
 
       it("should point to correct implementation after upgrade", async () => {
