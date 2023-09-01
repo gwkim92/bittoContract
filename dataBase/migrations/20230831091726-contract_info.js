@@ -17,7 +17,7 @@ module.exports = {
         allowNull: false,
       },
       abi: {
-        type: Sequelize.TEXT,
+        type: Sequelize.JSON,
         allowNull: false,
       },
       createdAt: {
