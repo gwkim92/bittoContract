@@ -1,8 +1,7 @@
 const { ethers } = require("hardhat");
 const fs = require("fs");
-const saveContract = require("../dataBase/methods/saveContractInfo");
-const loadingContract = require("../dataBase/methods/getContractInfo");
-// Load the contract artifact
+const contractDB = require("../dataBase/controller/contractController");
+// // Load the contract artifact
 const erc20ImplArtifact = require("../artifacts/contracts/token/bittoToken.impl.sol/ERC20Impl.json");
 const erc20ProxyArtifact = require("../artifacts/contracts/token/bittoToken.sol/ERC20Proxy.json");
 
@@ -10,10 +9,12 @@ const erc20ProxyArtifact = require("../artifacts/contracts/token/bittoToken.sol/
 
 async function main() {
   const [admin, minter] = await ethers.getSigners();
-
+  console.log(admin, minter);
   console.log("v1 deploy start");
+
   const erc20Impl = await ethers.deployContract("ERC20Impl");
-  await erc20Impl.waitForDeployment();
+  const erc20ImplReceipt = await erc20Impl.waitForDeployment();
+  console.log("deploy receipt erc20V1 : ", erc20ImplReceipt);
   const erc20V1Address = await erc20Impl.getAddress();
   console.log("v1 deployed");
   const initialSupply = ethers.parseUnits("10000", 18); // 1,000,000 토큰
@@ -54,22 +55,27 @@ async function main() {
   fs.writeFileSync("erc2Ov1ABI.json", erc20ImplABI);
   fs.writeFileSync("erc2Ov1ABI.json", erc2Ov1ABI);
 
-  const v1Save = await saveContract.saveContractInfo(
+  await contractDB.contracts.saveContractInfo(
     "Erc20V1",
     "1.0",
     erc20V1Address,
     erc20ImplABI
   );
-  const proxySave = await saveContract.saveContractInfo(
+  await contractDB.contracts.saveContractInfo(
     "Erc20Proxy",
     "1.0",
     proxyAddress,
     erc2Ov1ABI
   );
-  console.log(v1Save);
-  console.log(proxySave);
-  console.log(await loadingContract.getContractInfo("Erc20V1"));
-  console.log(await loadingContract.getContractInfo("Erc20Proxy"));
+
+  console.log(
+    "Erc20V1 Get DB : ",
+    await contractDB.contracts.getContractInfo("Erc20V1")
+  );
+  console.log(
+    "Erc20Proxy Get DB : ",
+    await contractDB.contracts.getContractInfo("Erc20Proxy")
+  );
   console.log("== deploy completed ==");
 }
 
