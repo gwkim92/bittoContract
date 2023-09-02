@@ -1,21 +1,29 @@
 const db = require("../models");
 const contract = db.contract_infos;
 
-async function saveContractInfo(name, version, address, abi) {
+async function saveContractInfo(chain, name, version, address, abi) {
   try {
-    // Save the contract information in the database
-    const result = await contract.create({
-      name: name,
-      version: version,
-      address: address,
-      abi: JSON.stringify(abi),
-    });
+    // Update the contract information if it exists or create a new one
+    const [result, created] = await contract.upsert(
+      {
+        chain: chain,
+        name: name,
+        version: version,
+        address: address,
+        abi: JSON.stringify(abi),
+      },
+      { returning: true }
+    );
 
-    console.log("Contract saved successfully.");
+    if (created) {
+      console.log("Contract created successfully.");
+    } else {
+      console.log("Contract updated successfully.");
+    }
 
     return result;
   } catch (err) {
-    console.error("Failed to save contract:", err);
+    console.error("Failed to save or update contract:", err);
   }
 }
 

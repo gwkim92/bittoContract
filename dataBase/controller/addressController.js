@@ -1,21 +1,19 @@
-const saveContractDB = require("../methods/saveContractInfo");
-const getContractDB = require("../methods/getContractInfo");
+const saveAddressDB = require("../methods/saveAddressInfo");
+const getAddresDB = require("../methods/getAddressInfo");
 const { sequelize } = require("../models");
 
 module.exports = {
-  contracts: {
-    saveContractInfo: async (chain, name, version, address, abi) => {
-      console.log("saveContractInfo", chain, name, version, address, abi);
+  addresss: {
+    saveAddressInfo: async (chain, name, address) => {
+      console.log("saveAddressInfo", chain, name, address);
       try {
         await sequelize.authenticate();
         console.log("connection to database");
 
-        const result = await saveContractDB.saveContractInfo(
+        const result = await saveAddressDB.saveAddressInfo(
           chain,
           name,
-          version,
-          address,
-          abi
+          address
         );
         console.log("result : ", result);
 
@@ -25,13 +23,13 @@ module.exports = {
       }
     },
 
-    getContractInfo: async (name) => {
-      console.log("getContractInfo : ", name);
+    getAddressInfo: async (name) => {
+      console.log("getAddressInfo : ", name);
       try {
         await sequelize.authenticate();
         console.log("connection to database");
 
-        const result = await getContractDB.getContractInfo(name);
+        const result = await getAddresDB.getAddressInfo(name);
         console.log("result : ", result);
         return result;
       } catch (error) {
