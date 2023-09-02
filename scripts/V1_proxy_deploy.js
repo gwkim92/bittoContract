@@ -94,8 +94,9 @@ async function main() {
   console.log("== deploy completed ==");
 }
 //TODO
-//V1 fs 제거 및 데이터베이스 데이터 가져오기 세팅
-//database save 시 name 이름 중복 => 제일 최근 데이터로 업데이트
+// V1 fs 제거 및 데이터베이스 데이터 가져오기 세팅
+// database save 시 name 이름 중복 => 제일 최근 데이터로 업데이트
+//  완
 //V2 database 작업
 //backend database data 끌어오기, transaction 처리
 //wallet 함수 폴더정리
