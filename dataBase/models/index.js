@@ -10,6 +10,7 @@ const config = require(__dirname + "/../config/config.js")[env];
 
 const db = {};
 db.contract_infos = require("./contract_info.js");
+db.address_infos = require("./address_info.js");
 
 let sequelize;
 

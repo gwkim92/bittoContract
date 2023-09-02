@@ -1,6 +1,7 @@
 const { ethers } = require("hardhat");
 const fs = require("fs");
 const contractDB = require("../dataBase/controller/contractController");
+const addressDB = require("../dataBase/controller/addressController");
 // // Load the contract artifact
 const erc20ImplArtifact = require("../artifacts/contracts/token/bittoToken.impl.sol/ERC20Impl.json");
 const erc20ProxyArtifact = require("../artifacts/contracts/token/bittoToken.sol/ERC20Proxy.json");
@@ -9,7 +10,9 @@ const erc20ProxyArtifact = require("../artifacts/contracts/token/bittoToken.sol/
 
 async function main() {
   const [admin, minter] = await ethers.getSigners();
-  console.log(admin, minter);
+
+  await addressDB.addresss.saveAddressInfo("eth", "admin", admin.address);
+  await addressDB.addresss.saveAddressInfo("eth", "minter", admin.address);
   console.log("v1 deploy start");
 
   const erc20Impl = await ethers.deployContract("ERC20Impl");
@@ -56,18 +59,30 @@ async function main() {
   fs.writeFileSync("erc2Ov1ABI.json", erc2Ov1ABI);
 
   await contractDB.contracts.saveContractInfo(
+    "eth",
     "Erc20V1",
     "1.0",
     erc20V1Address,
     erc20ImplABI
   );
   await contractDB.contracts.saveContractInfo(
+    "eth",
     "Erc20Proxy",
     "1.0",
     proxyAddress,
     erc2Ov1ABI
   );
 
+  ///////////// get data Test ///////////
+  console.log("///////////// get data Test ///////////");
+  console.log(
+    "Admin Address",
+    await addressDB.addresss.getAddressInfo("admin")
+  );
+  console.log(
+    "Minter Address",
+    await addressDB.addresss.getAddressInfo("minter")
+  );
   console.log(
     "Erc20V1 Get DB : ",
     await contractDB.contracts.getContractInfo("Erc20V1")
@@ -78,7 +93,13 @@ async function main() {
   );
   console.log("== deploy completed ==");
 }
-
+//TODO
+//V1 fs 제거 및 데이터베이스 데이터 가져오기 세팅
+//database save 시 name 이름 중복 => 제일 최근 데이터로 업데이트
+//V2 database 작업
+//backend database data 끌어오기, transaction 처리
+//wallet 함수 폴더정리
+//노션 정리. 블로깅
 main()
   .then(() => process.exit(0))
   .catch((error) => {
